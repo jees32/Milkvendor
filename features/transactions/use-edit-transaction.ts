@@ -5,10 +5,10 @@ import { toast } from "sonner";
 import {client} from "@/lib/hono";
 import { json } from "stream/consumers";
 
-type ResposeType = InferResponseType<typeof client.api.accounts[":id"]["$patch"]>;
-type RequestType= InferRequestType<typeof client.api.accounts[":id"]["$patch"]>["json"];
+type ResposeType = InferResponseType<typeof client.api.transactions[":id"]["$patch"]>;
+type RequestType= InferRequestType<typeof client.api.transactions[":id"]["$patch"]>["json"];
 
-export const useEditAccount =(id?:string) =>{
+export const useEditTransaction =(id?:string) =>{
     const queryClient=useQueryClient();
 
     const mutation=useMutation<
@@ -19,7 +19,7 @@ export const useEditAccount =(id?:string) =>{
     >
     ({
         mutationFn: async (json) => {
-            const response=await client.api.accounts[":id"]["$patch"]({
+            const response=await client.api.transactions[":id"]["$patch"]({
                 param:{id},
                 json,                
             })
@@ -27,14 +27,14 @@ export const useEditAccount =(id?:string) =>{
             
         },
         onSuccess: () => {
-            toast.success("Account updated")
+            toast.success("Transaction updated")
            
-             // queryClient.invalidateQueries({ queryKey: ["accounts",id]});
-             queryClient.invalidateQueries({ queryKey: ["accounts"]});
+             queryClient.invalidateQueries({ queryKey: ["accounts",]});
+             queryClient.invalidateQueries({ queryKey: ["transactions"]});
 
         },
         onError: () => {
-            toast.error("Failed to edit account")
+            toast.error("Failed to edit transaction")
         }
     })
     return mutation;

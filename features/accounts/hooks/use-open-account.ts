@@ -7,9 +7,16 @@ type openAccountState = {
     onClose: ()=> void;
 };
 
+
 export const useOpenAccount = create<openAccountState>((set) => ({
-    id:undefined,
+    id: undefined,
     isOpen: false,
-    onOpen: (id:string) => set({isOpen:true, id}),
-    onClose: () => set({isOpen:false, id: undefined})
-}))
+    onOpen: (id: string) => {
+      console.log("Opening account sheet with ID:", id);
+      set({ isOpen: true, id });
+    },
+    onClose: () => {
+      console.log("Closing account sheet");
+      set({ isOpen: false, id: undefined });
+    },
+  }));

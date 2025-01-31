@@ -5,8 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { insertTransactionsSchema } from "@/db/schema";
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import { NameField } from "../../../components/ui/namefield";
 import {
   Form,
   FormField,
@@ -16,7 +16,7 @@ import {
   FormItem,
 } from "@/components/ui/form";
 
-import { DatePicker } from "@/components/ui/date-picker"; // Import DatePicker from shadcn/ui
+import { DatePicker } from "@/components/ui/date-picker";
 
 const formSchema = insertTransactionsSchema.pick({
   amount: true,
@@ -60,64 +60,114 @@ export const TransactionForm = ({
   const data = [
     { name: "Name", placeHolder: "Name on the account" },
     { name: "Amount", placeHolder: "Amount in INR" },
-    { name: "Date", placeHolder: "YEAR-MM-DD" },
     { name: "Type", placeHolder: "Enter sale or payment" },
     { name: "Notes", placeHolder: "Additional notes" },
   ];
+  console.log("defaultvalues in transaction form",defaultValues);
+
+  useEffect(() => {
+    if (defaultValues) {
+      form.reset(defaultValues);
+    }
+  }, [defaultValues, form.reset]);
+
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4 pt-4">
-        {data.map((fieldData, index) => (
-          <FormField
-            key={index}
-            name={fieldData.name.toLowerCase()} // Assuming the form field names match
-            control={form.control}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{fieldData.name}</FormLabel>
-                <FormControl>
-                  {fieldData.name.toLowerCase() === "date" ? (
-                    <DatePicker
-                      selected={field.value ? new Date(field.value) : undefined} // Convert string date to Date object
-                      // onChange={(date) =>
-                      //   field.onChange(date)
-                      // }
-                      onChange={(date) => {
-                        if (date) {
-                          const correctedDate = new Date(date);
-                          correctedDate.setHours(12, 0, 0, 0); // Set the time to noon to eliminate timezone issues
-                          field.onChange(correctedDate.toISOString()); // Update with the corrected ISO string
-                        } else {
-                          field.onChange(""); // Clear the value if no date is selected
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className=" p-2 flex flex-col justify-around h-full"
+      >
+        <div className="flex-grow space-y-2">
+          {data.map((fieldData, index) => (
+            <FormField
+              key={index}
+              name={fieldData.name.toLowerCase()}
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{fieldData.name}</FormLabel>
+                  <FormControl>
+                    {fieldData.name.toLowerCase() === "name" ? (
+                      <NameField
+                        value={field.value}
+                        onChange={field.onChange}
+                        disabled={disabled}
+                      />
+                    ) : fieldData.name.toLowerCase() === "type" ? (
+                      <select
+                        {...field}
+                        disabled={disabled}
+                        className="w-full p-2 border rounded"
+                      >
+                        <option value="">Select type</option>
+                        <option value="Debt">Debt</option>
+                        <option value="Payment">Payment</option>
+                      </select>
+                    ) : fieldData.name.toLowerCase() === "notes" ? (
+                      <Input
+                        type="text"
+                        disabled={disabled}
+                        placeholder={fieldData.placeHolder}
+                        {...form.register(fieldData.name.toLowerCase())}
+                      />
+                    ) : (
+                      <Input
+                        type={
+                          fieldData.name.toLowerCase() === "amount" ? "number" : "text"
                         }
-                      }}
-                      placeholderText="Select a date"
-                      disabled={disabled}
-                    />
-                  ) : (
-                    <Input
-                      type={
-                        fieldData.name.toLowerCase() === "amount" ? "number" : "text"
-                      }
-                      disabled={disabled}
-                      placeholder={fieldData.placeHolder}
-                      {...form.register(fieldData.name.toLowerCase(), {
-                        valueAsNumber:
-                          fieldData.name.toLowerCase() === "amount", // Only for the "amount" field
-                      })}
-                    />
-                  )}
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        ))}
+                        disabled={disabled}
+                        placeholder={fieldData.placeHolder}
+                        {...form.register(fieldData.name.toLowerCase(), {
+                          valueAsNumber: fieldData.name.toLowerCase() === "amount",
+                        })}
+                      />
+                    )}
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          ))}
+        </div>
 
-        <Button className="w-full " disabled={disabled}>
+        {/* Date field at the bottom */}
+        <div className="mt-1">
+        <FormField
+          name="date"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Date</FormLabel>
+              <FormControl>
+                <DatePicker
+                  selected={field.value ? new Date(field.value).toISOString().split("T")[0] : undefined}
+                  onChange={(date) => {
+                    if (date) {
+                      const correctedDate = new Date(date);
+                      correctedDate.setHours(12, 0, 0, 0);
+                      console.log(date);
+                      console.log(correctedDate);
+                      field.onChange(correctedDate.toISOString());
+                    } else {
+                      field.onChange("");
+                    }
+                  }}
+                  placeholderText="Select a date"
+                  disabled={disabled}
+                />
+                
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        </div>
+        <div className="mt-4">
+        <Button className="w-full" disabled={disabled}>
           {id ? "Save Changes" : "Create Transaction"}
         </Button>
+        </div>
         {!!id && (
           <Button
             type="button"
@@ -132,5 +182,6 @@ export const TransactionForm = ({
         )}
       </form>
     </Form>
+    
   );
 };

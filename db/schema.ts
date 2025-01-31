@@ -8,6 +8,8 @@ export const account=pgTable("accounts",{
     name: text("name").notNull(),
     userId: text("user_id").notNull(),
     plaidId: text("plaid_id"),
+    address:text("address").default(''),
+    phone:text("phone").default(''),
 });
 
 export const transactions=pgTable("transactions",{

@@ -1,6 +1,6 @@
 "use client";
 
-import { useBulkDeleteTransactions } from "@/features/accounts/api/use-bulk-delete-transactions";
+import { useBulkDeleteTransactions } from "@/features/transactions/api/use-bulk-delete-transactions";
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -13,43 +13,22 @@ import {
 } from "@/components/ui/card";
  import {columns } from "./columns";
  import { DataTable } from "@/components/ui/data-table";
+ import { useGetTransactions } from "@/features/transactions/api/use-get-transactions";
 
 const Transactions = () => {
   const deleteTransactions =useBulkDeleteTransactions();
   const { onOpen } = useNewTransaction();
   const [loading, setLoading] = useState(true); // State for loading indicator
-  const [error, setError] = useState(null); // State for error handling
-  const [transactions, setTransactions] = useState([]);
-  const formatDate = (isoString) => {
+  const [error, setError] = useState<string | null>(null);// State for error handling
+  const transQuery=useGetTransactions();
+  const transactions=transQuery.data || [];
+  console.log("new transactions",transactions)
+  const formatDate = (isoString: string | number | Date) => {
     const date = new Date(isoString);
     return new Intl.DateTimeFormat('en-US', { dateStyle: 'medium' }).format(date);
   };
 
-  const fetchTransactions = async () => {
-    try {
-      const response = await fetch("http://localhost:3000/api/transactions");
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      setTransactions(data.data);
-      console.log("Fetched transactions:", data.data);
-      
-    } catch (error) {
-      console.error("Error fetching transactions:", error);
-      setError(error.message); // Save error to state
-    } finally {
-      setLoading(false); // Stop loading indicator
-    }
-  };
-
-  useEffect(() => {
-    fetchTransactions();
-  }, []);
-
-  useEffect(() => {
-    console.log("Updated transactions state:", transactions);
-  }, [transactions]);
+  
 
   return (
     <div className="max-w-screen-2xl mx-auto w-full pb-10 -mt-24">
@@ -67,9 +46,9 @@ const Transactions = () => {
          <DataTable
                onDelete={(row) => {
                  const ids=row.map((r)=> r.original.id);
-                 deleteAccounts.mutate({ids});
+                 deleteTransactions.mutate({ids});
                }} 
-               filterKey="accountName" 
+               filterKey="name" 
                columns={columns} 
                data={transactions} 
                disabled={false}

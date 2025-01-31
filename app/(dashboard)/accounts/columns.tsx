@@ -51,6 +51,27 @@ export const columns: ColumnDef<ResposeType>[] = [
       },
   },
 
+  {
+    accessorKey: "phone",
+    header: ({ column }) => {
+        return (
+          <div className="text-sm font-normal">
+            Phone
+          </div>
+        )
+      },
+  },
+
+  {
+    accessorKey: "address",
+    header: ({ column }) => {
+        return (
+          <div className="text-sm font-normal">
+            Address
+          </div>
+        )
+      },
+  },
 
   {
     accessorKey: "totalAmount",

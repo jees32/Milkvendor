@@ -18,6 +18,8 @@ import { handleClientScriptLoad } from "next/script";
 
 const formSchema = insertAccountSchema.pick({
     name:true,
+    phone:true,
+    address:true,
 })
 
 type FormValues=Z.input<typeof formSchema>;
@@ -69,6 +71,48 @@ export const AccountForm = ({
                            <Input
                            disabled={disabled}
                            placeholder="Enter Client's name"
+                           {...field}
+                           />
+                           
+                        </FormControl>
+                    </FormItem>
+
+                )}
+                />
+
+                <FormField
+                name="phone"
+                control={form.control}
+                render={({field}) => (
+                    <FormItem>
+                        <FormLabel>
+                            Phone
+                        </FormLabel>
+                        <FormControl>
+                           <Input
+                           disabled={disabled}
+                           placeholder="Enter Client's phone number"
+                           {...field}
+                           />
+                           
+                        </FormControl>
+                    </FormItem>
+
+                )}
+                />
+
+                <FormField
+                name="address"
+                control={form.control}
+                render={({field}) => (
+                    <FormItem>
+                        <FormLabel>
+                            Address
+                        </FormLabel>
+                        <FormControl>
+                           <Input
+                           disabled={disabled}
+                           placeholder="Enter Client's address"
                            {...field}
                            />
                            

@@ -7,7 +7,7 @@ import { Sheet,
 import { useNewAccount } from "../hooks/use-new-account";
 import { insertTransactionsSchema } from "@/db/schema";
 import { z } from "zod";
-import { useCreateTransaction } from "../api/use-create-transactions";
+import { useCreateTransaction } from "../../transactions/api/use-create-transactions";
 import { useNewTransaction } from "../hooks/use-new-transaction";
 import { TransactionForm } from "./transaction-form";
 
@@ -45,12 +45,12 @@ type FormValues= z.input<typeof formSchema>;
         <Sheet open={isOpen} onOpenChange={onClose} >
             <SheetContent className="space-y-4">
                 <SheetHeader>
-                    <SheetTitle>
+                    <SheetTitle className="mt-8">
                         Create New Transaction
                     </SheetTitle>
-                    <SheetDescription>
+                    {/* <SheetDescription>
                         Create a new transaction to be added to the account. 
-                    </SheetDescription>
+                    </SheetDescription> */}
 
                 </SheetHeader>                
                <TransactionForm

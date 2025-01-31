@@ -27,7 +27,7 @@ export function DatePicker({ selected, onChange, disabled }: DatePickerProps) {
         <Button
           variant={"outline"}
           className={cn(
-            "w-[280px] justify-start text-left font-normal",
+            "w-[180px] -mt-32 justify-start text-right font-normal",
             !selectedDate && "text-muted-foreground"
           )}
           disabled={disabled}
@@ -36,8 +36,9 @@ export function DatePicker({ selected, onChange, disabled }: DatePickerProps) {
           {selectedDate ? format(selectedDate, "PPP") : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0">
+      <PopoverContent className="w-[280px] p-0 ">
         <Calendar
+        className="pointer-events-auto"
           mode="single"
           selected={selectedDate}
           onSelect={(date) => {
@@ -47,15 +48,16 @@ export function DatePicker({ selected, onChange, disabled }: DatePickerProps) {
             // Ensure the selected date is a valid Date and convert it to the required string format
             if (date instanceof Date && !isNaN(date.getTime())) {
               // Convert date to YYYY-MM-DD string format
-            //   const formattedDate = date.toISOString().split("T")[0];
-            //   console.log("Formatted Date:",formattedDate)
+              const formattedDate = date.toISOString().split("T")[0];
+              console.log("Formatted Date:",formattedDate);
+              
               onChange(date); // Update form state with the ISO string
             } else {
               console.error("Invalid date selected:", date);
               onChange(undefined); // Set to undefined if the date is invalid
             }
           }}
-          initialFocus
+          
         />
       </PopoverContent>
     </Popover>

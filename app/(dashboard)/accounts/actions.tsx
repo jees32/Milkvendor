@@ -29,17 +29,23 @@ export const Actions = ({id}:Props) =>{
         <DropdownMenuContent align="end">
             <DropdownMenuItem
             disabled={false}
-            onClick={() => onOpen(id)}>
+            onClick={() => {
+                console.log("Opening EditAccountSheet with ID:", id);
+                onOpen(id);
+              }}>
                 <Edit className="size-4 mr-2"/>
                 Edit
             </DropdownMenuItem>
 
             <DropdownMenuItem
             disabled={false}
+            asChild
             >
-                <Edit className="size-4 mr-2"/>
                 <Link href={`/transactions/${id}`}>
+                <div className="flex items-center">
+                <Edit className="size-4 mr-2"/>                
                 Transactions
+                </div>
                 </Link>
             </DropdownMenuItem>
 

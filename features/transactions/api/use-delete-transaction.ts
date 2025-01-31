@@ -5,30 +5,33 @@ import { toast } from "sonner";
 import {client} from "@/lib/hono";
 import { json } from "stream/consumers";
 
-type ResposeType = InferResponseType<typeof client.api.accounts.$post>;
-type RequestType= InferRequestType<typeof client.api.accounts.$post>["json"];
+type ResposeType = InferResponseType<typeof client.api.transactions[":id"]["$delete"]>;
 
-export const useCreateTransaction =() =>{
+
+export const useDeleteTransaction =(id?:string) =>{
     const queryClient=useQueryClient();
+
     const mutation=useMutation<
     ResposeType,
-    Error,
-    RequestType
+    Error 
     
     >
     ({
-        mutationFn: async (json) => {
-            const response=await client.api.transactions.$post({ json })
+        mutationFn: async () => {
+            const response=await client.api.transactions[":id"]["$delete"]({
+                param:{id},                               
+            })
             return await response.json();
         },
         onSuccess: () => {
-            toast.success("Created transaction successfully!")
+            toast.success("Transaction deleted")
+            queryClient.invalidateQueries({ queryKey: ["transactions",{id}]});
             queryClient.invalidateQueries({ queryKey: ["transactions"]});
             
 
         },
         onError: () => {
-            toast.error("Failed to create transaction")
+            toast.error("Failed to delete transaction")
         }
     })
     return mutation;

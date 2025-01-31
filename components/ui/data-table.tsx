@@ -49,7 +49,10 @@ if (!data || data.length === 0) {
     const [sorting,setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
         []);
-        const [rowSelection,setRowSelection]=React.useState({});
+    const [rowSelection,setRowSelection]=React.useState({}); 
+
+
+
   const table = useReactTable({
     data,
     columns,
@@ -69,14 +72,16 @@ if (!data || data.length === 0) {
   return (
     <div>
         <div className="flex items-center p-2">
-        <Input
-          placeholder={`Filter ${filterKey}...`}
-          value={(table.getColumn(filterKey)?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn(filterKey)?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+        {filterKey && (
+          <Input
+            placeholder={`Filter ${filterKey}...`}
+            value={(table.getColumn(filterKey)?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn(filterKey)?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
+        )}
         {table.getFilteredSelectedRowModel().rows.length > 0 &&
         (
             <Button

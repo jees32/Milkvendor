@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { InferResponseType } from "hono"
 import { client } from "@/lib/hono"
-import { Actions } from "./actions";
+import { Actions } from "../accounts/actions"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -38,8 +38,7 @@ export const columns: ColumnDef<ResposeType>[] = [
 
  
   {
-    // accessorKey: "accountName",
-    accessorKey: "name",
+    accessorKey: "accountName",
     header: ({ column }) => {
       return(
       <div className="text-sm font-normal">

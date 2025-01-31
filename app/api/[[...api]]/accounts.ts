@@ -24,6 +24,8 @@ const app= new Hono()
           id: account.id,
           name: account.name,
           totalAmount: sql<number>`SUM(${transactions.amount})`,
+          phone: account.phone,
+          address:account.address,
         })
         .from(account)
         .leftJoin(transactions, eq(account.id, transactions.accountId))  
@@ -65,6 +67,8 @@ const app= new Hono()
         const [data]= await db.select({
             id:account.id,
             name:account.name,
+            phone:account.phone,
+            address:account.address,
         })
         .from(account)
         .where(
@@ -93,7 +97,12 @@ const app= new Hono()
             return c.json({error:"UnauthoriZed"},401)
         }
         const body = await c.req.json();
-        const validation = insertAccountSchema.pick({ name: true }).safeParse(body);
+        const validation = insertAccountSchema.pick({ 
+            name: true,
+            address:true,
+            phone:true,
+
+         }).safeParse(body);
 
         if (!validation.success) {
             return c.json(
@@ -205,7 +214,10 @@ const app= new Hono()
         zValidator(
             "json",
             insertAccountSchema.pick({
-                name:true
+                name:true,
+                phone:true,
+                address:true,
+
             })
           
         ),

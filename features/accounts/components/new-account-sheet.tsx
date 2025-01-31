@@ -49,6 +49,8 @@ type FormValues= z.input<typeof formSchema>;
                  disabled={mutation.isPending}
                  defaultValues={{
                     name:"",
+                    phone:"",
+                    address:"",
                  }}/>
             </SheetContent>
         </Sheet>

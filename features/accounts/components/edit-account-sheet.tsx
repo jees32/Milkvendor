@@ -13,8 +13,12 @@ import { useGetAccount } from "../api/use-get-account";
 import { Loader2 } from "lucide-react";
 import { useEditAccount } from "../api/use-edit-account";
 import { useDeleteAccount } from "../api/use-delete-account";
+import { useEffect } from "react";
+
 const formSchema=insertAccountSchema.pick({
-    name:true
+    name:true,
+    phone:true,
+    address:true,
 });
 
 type FormValues= z.input<typeof formSchema>;
@@ -24,28 +28,36 @@ type FormValues= z.input<typeof formSchema>;
     const accountQuery=useGetAccount(id);
     const editMutation=useEditAccount(id);
     const deleteMutation=useDeleteAccount(id);
-    const isPending=editMutation.isPending || 
-    deleteMutation.isPending;
 
-    
+    const isPending=editMutation.isPending || 
+    deleteMutation.isPending;    
     const isLoading=accountQuery.isLoading;
 
     const onSubmit= (values:FormValues) => {
         editMutation.mutate(values,{
             onSuccess: () =>{
+                console.log("Edit mutation success, closing sheet...");
                 onClose();
             }
 
         }
             
         );
-        console.log({ values})
+        console.log("Edit form submitted with values:", values);
     }
-    const defaultValues= accountQuery.data? {
-        name:accountQuery.data.name
-    }:{
-        name:"",
-    }
+    
+    const defaultValues = {
+        name: accountQuery.data?.name || "",
+        phone: accountQuery.data?.phone || "",
+        address: accountQuery.data?.address || "",
+      };
+      console.log("accountQuery:",accountQuery.data)
+    //   useEffect(() => {
+    //     if (!isOpen) {
+    //       console.log("Account sheet closed.");
+    //     }
+    //   }, [isOpen]);
+
     return(
         <Sheet open={isOpen} onOpenChange={onClose} >
             <SheetContent className="space-y-4">
@@ -65,9 +77,9 @@ type FormValues= z.input<typeof formSchema>;
 
                         </div>
                     ):(
-                        <AccountForm 
+                        <AccountForm                         
                         id={id}
-                        onDelete={ () => deleteMutation.mutate() }
+                        onDelete={ () => deleteMutation.mutate({id}) }
                         onSubmit={onSubmit}
                         disabled={isPending}
                         defaultValues={defaultValues}/>

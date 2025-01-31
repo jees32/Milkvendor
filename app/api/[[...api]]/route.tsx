@@ -2,6 +2,7 @@ import {handle} from "hono/vercel" ;
 import { Hono } from "hono/";
 import accounts from "./accounts"
 import transactions from "./transactions"
+import dashboard from "./dashboard"
 import {HTTPException} from "hono/http-exception";
 
 
@@ -11,7 +12,8 @@ const app=new Hono().basePath('/api')
 
 const routes= app
 .route("/accounts",accounts)
-.route("/transactions",transactions);
+.route("/transactions",transactions)
+.route("/dashboard",dashboard);
 
 
 export const GET= handle(app);

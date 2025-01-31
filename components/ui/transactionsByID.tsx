@@ -1,7 +1,7 @@
 "use client"
 
 import { useGetAccount } from "@/features/accounts/api/use-get-account"
-import { useGetTransactionsByID } from "@/features/accounts/api/use-get-transactions-byid"
+import { useGetTransactionsByID } from "@/features/transactions/api/use-get-transactions-byid";
 import {
     Table,
     TableHeader,
@@ -12,12 +12,18 @@ import {
     TableBody,
   } from "@/components/ui/table";
 import { useState,useEffect } from "react";
+import { DataTable } from "@/components/ui/data-table";
+import { columns } from "@/app/(dashboard)/transactions/columns";
+import { useBulkDeleteTransactions } from "@/features/transactions/api/use-bulk-delete-transactions";
+
+
 
 export const TransactionsByID = ({id})=> {
     const [isLoading,setLoading]=useState(true);
     const transQuery=useGetTransactionsByID(id);
     const transactions=Array.isArray(transQuery.data) ? transQuery.data : [];
-    console.log("Data from useget",transactions);
+    const deleteTransactions=useBulkDeleteTransactions();
+    console.log("Data from usegetTBID",transactions);
 
     useEffect(() => {
         if (transQuery.isSuccess || transQuery.isError) {
@@ -44,37 +50,16 @@ export const TransactionsByID = ({id})=> {
       
 
         <div className="overflow-x-auto">
-               <Table className="w-full table-auto">
-                 <TableCaption>A list of your recent Transactions</TableCaption>
-                 <TableHeader>
-                   <TableRow>
-                     <TableHead className="text-left">Client Name</TableHead>
-                     <TableHead className="text-left">Transaction Type</TableHead>
-                     <TableHead className="text-left hidden sm:table-cell">
-                       Comments
-                     </TableHead>
-                     <TableHead className="text-left hidden md:table-cell">
-                       Date
-                     </TableHead>
-                     <TableHead className="text-right">Amount</TableHead>
-                   </TableRow>
-                 </TableHeader>
-                 <TableBody>
-                   {transactions.map((transaction) => (
-                     <TableRow key={transaction.id}>
-                       <TableCell>{transaction.accountName}</TableCell>
-                       <TableCell>{transaction.type}</TableCell>
-                       <TableCell className="hidden sm:table-cell">
-                         {transaction.notes}
-                       </TableCell>
-                       <TableCell className="hidden md:table-cell">
-                         {formatDate(transaction.date)}
-                       </TableCell>
-                       <TableCell className="text-right">{transaction.amount}</TableCell>
-                     </TableRow>
-                   ))}
-                 </TableBody>
-               </Table>
+          <h1 className="mt-4 ml-2 font-bold ">Transactions by {transactions[0].name}</h1>
+          <DataTable
+                         onDelete={(row) => {
+                           const ids=row.map((r)=> r.original.id);
+                           deleteTransactions.mutate({ids});
+                         }}                          
+                         columns={columns} 
+                         data={transactions} 
+                         disabled={false}
+                         />   
              </div>
        
     )

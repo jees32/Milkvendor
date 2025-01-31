@@ -36,6 +36,27 @@
       "when": 1737121233640,
       "tag": "0004_mute_blizzard",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1737781510717,
+      "tag": "0005_productive_talon",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1737788530954,
+      "tag": "0006_shallow_frank_castle",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1737788762230,
+      "tag": "0007_parallel_rocket_racer",
+      "breakpoints": true
     }
   ]
 }
