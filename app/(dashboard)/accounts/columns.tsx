@@ -10,8 +10,15 @@ import { Actions } from "./actions"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-export type ResposeType = InferResponseType<typeof client.api.accounts.$get, 200>;
-export const columns: ColumnDef<ResposeType>[] = [
+export type ResposeType = {
+  id: string;
+  name: string;
+  totalAmount: number;
+  phone: string | null;
+  address: string | null;
+}[];
+
+export const columns: ColumnDef<ResposeType[number]>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -35,68 +42,51 @@ export const columns: ColumnDef<ResposeType>[] = [
     enableHiding: false,
   },
 
- 
   {
     accessorKey: "name",
-    header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Client Name
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        )
-      },
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        className="text-sm font-bold"
+      >
+        Client Name
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
   },
 
   {
     accessorKey: "phone",
-    header: ({ column }) => {
-        return (
-          <div className="text-sm font-normal">
-            Phone
-          </div>
-        )
-      },
+    header: () => <div className="text-sm font-bold">Phone</div>,
   },
 
   {
     accessorKey: "address",
-    header: ({ column }) => {
-        return (
-          <div className="text-sm font-normal">
-            Address
-          </div>
-        )
-      },
+    header: () => <div className="text-sm font-bold">Address</div>,
   },
 
   {
     accessorKey: "totalAmount",
-    header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Outstanding Amount
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-
-      sortingFn: (rowA, rowB, columnId) => {
-        const amountA = parseFloat(rowA.getValue(columnId)) || 0;
-        const amountB = parseFloat(rowB.getValue(columnId)) || 0;
-        return amountA - amountB;
-      },
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        className="text-sm font-bold"
+      >
+        Outstanding Amount
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
+    sortingFn: (rowA, rowB, columnId) => {
+      const amountA = parseFloat(rowA.getValue(columnId)) || 0;
+      const amountB = parseFloat(rowB.getValue(columnId)) || 0;
+      return amountA - amountB;
+    },
   },
 
-
- {
-  id:"actions",
-  cell:({ row}) => <Actions id={row.original.id}/>
- }
-]
+  {
+    id: "actions",
+    cell: ({ row }) => <Actions id={row.original.id} />,
+  },
+];

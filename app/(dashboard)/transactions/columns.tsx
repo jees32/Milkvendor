@@ -42,7 +42,7 @@ export const columns: ColumnDef<ResposeType>[] = [
     accessorKey: "name",
     header: ({ column }) => {
       return(
-      <div className="text-sm font-normal">
+      <div className="text-sm font-bold">
       Name
     </div>
     )
@@ -53,7 +53,7 @@ export const columns: ColumnDef<ResposeType>[] = [
     accessorKey: "type",
     header: () => {
       return (
-        <div className="text-sm font-normal">
+        <div className="text-sm font-bold">
           Type
         </div>
       );
@@ -64,7 +64,7 @@ export const columns: ColumnDef<ResposeType>[] = [
       accessorKey: "notes",
       header: () => {
         return (
-          <div className="text-sm font-normal">
+          <div className="text-sm font-bold">
             Comments
           </div>
         );
@@ -76,6 +76,7 @@ export const columns: ColumnDef<ResposeType>[] = [
               <Button
                 variant="ghost"
                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                className="text-sm font-bold"
               >
                 Date
                 <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -104,6 +105,7 @@ export const columns: ColumnDef<ResposeType>[] = [
                 <Button
                   variant="ghost"
                   onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                  className="text-sm font-bold"
                 >
                   Amount
                   <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -111,8 +113,8 @@ export const columns: ColumnDef<ResposeType>[] = [
               );
             },
           },
- {
-  id:"actions",
-  cell:({ row}) => <Actions id={row.original.id}/>
- }
+  {
+    id: "actions",
+    cell: ({ row }) => <Actions id={row.original.id} />,
+  },
 ]

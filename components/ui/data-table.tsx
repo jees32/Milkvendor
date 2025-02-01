@@ -107,7 +107,7 @@ if (!data || data.length === 0) {
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead className= "text-black text-3xl font-bold " key={header.id}>
+                  <TableHead className= "text-black text-3xlfont-bold " key={header.id}>
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -128,7 +128,7 @@ if (!data || data.length === 0) {
                 data-state={row.getIsSelected() && "selected"}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
+                  <TableCell className="text-sm font-medium text-gray-800 px-4 py-2"key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
@@ -144,7 +144,7 @@ if (!data || data.length === 0) {
         </TableBody>
       </Table>
     </div>
-    <div className="flex items-center justify-end space-x-2 py-4">
+    <div className="flex items-center justify-end space-x-2 py-2">
     <div className="flex-1 text-sm text-muted-foreground">
   {table.getFilteredSelectedRowModel().rows.length} of{" "}
   {table.getFilteredRowModel().rows.length} row(s) selected.

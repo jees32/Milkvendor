@@ -20,9 +20,9 @@ interface DatePickerProps {
 export function DatePicker({ selected, onChange, disabled }: DatePickerProps) {
   // Convert the string to a Date object if needed
   const selectedDate = selected ? new Date(selected) : undefined;
-
+  const [isCalendarOpen,setIsCalendarOpen]=React.useState(false);
   return (
-    <Popover>
+    <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}
@@ -49,9 +49,9 @@ export function DatePicker({ selected, onChange, disabled }: DatePickerProps) {
             if (date instanceof Date && !isNaN(date.getTime())) {
               // Convert date to YYYY-MM-DD string format
               const formattedDate = date.toISOString().split("T")[0];
-              console.log("Formatted Date:",formattedDate);
-              
+              console.log("Formatted Date:",formattedDate);              
               onChange(date); // Update form state with the ISO string
+              setIsCalendarOpen(false);
             } else {
               console.error("Invalid date selected:", date);
               onChange(undefined); // Set to undefined if the date is invalid
