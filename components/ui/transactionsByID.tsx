@@ -50,7 +50,9 @@ export const TransactionsByID = ({id})=> {
       
 
         <div className="overflow-x-auto">
-          <h1 className="mt-4 ml-2 font-bold ">Transactions by {transactions[0].name}</h1>
+          {transactions.length>0?(<h1 className="mt-4 ml-2 font-bold ">Transactions by {transactions[0].name }</h1>
+        ):(<h1 className="mt-4 ml-2 font-bold ">No transaction available for the account</h1>)}
+          
           <DataTable
                          onDelete={(row) => {
                            const ids=row.map((r)=> r.original.id);

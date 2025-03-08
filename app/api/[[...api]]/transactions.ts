@@ -26,8 +26,9 @@ const app= new Hono()
        notes:transactions.notes,
        date:transactions.date       
     })
-    . from (transactions)
+    .from (transactions)
     .innerJoin(account, eq(transactions.accountId, account.id))   
+    .where(eq(auth.userId,transactions.userId))
     .execute();
     
     return c.json({ data});

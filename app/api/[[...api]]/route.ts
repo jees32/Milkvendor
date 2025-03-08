@@ -4,6 +4,7 @@ import accounts from "./accounts"
 import transactions from "./transactions"
 import dashboard from "./dashboard"
 import {HTTPException} from "hono/http-exception";
+import signup from "./signup"
 
 
 export const runtime="edge";
@@ -13,7 +14,8 @@ const app=new Hono().basePath('/api')
 const routes= app
 .route("/accounts",accounts)
 .route("/transactions",transactions)
-.route("/dashboard",dashboard);
+.route("/dashboard",dashboard)
+.route("/signup",signup);
 
 
 export const GET= handle(app);

@@ -29,7 +29,8 @@ const app= new Hono()
         })
         .from(account)
         .leftJoin(transactions, eq(account.id, transactions.accountId))  
-        .groupBy(account.id);      
+        .groupBy(account.id)
+        .where(eq(auth.userId,account.userId));      
        
         console.log("Raw Data:", data);
 
@@ -113,15 +114,19 @@ const app= new Hono()
 
           const values = validation.data;
 
-
+        try {
         const [data]=await db.insert(account).values({
             userId:auth.userId,
             ...values,
             id:createId(),
         }).returning();
         return c.json({data});
-
+    } catch (error) {
+        console.error("Error inserting account:", error);
+        return c.json({ error: "Failed to create account" }, 500);
+    }
      })
+     
      .delete(
         "/:id",
         clerkMiddleware(),

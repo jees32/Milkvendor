@@ -15,24 +15,27 @@ import { Menu } from 'lucide-react';
 const routes=[
     {
         href:"/",
-        label:"Dashboard"
+        label:"Home"
     },
     {
-        href:"/transactions",
-        label:"Transactions"
+        href:"/dashboard",
+        label:"Dashboard"
     },
     {
         href:"/accounts",
         label:"Accounts"
     },
     {
-        href:"/categories",
-        label:"Categories"
+        href:"/transactions",
+        label:"Transactions"
     },
     {
-        href:"/settings",
-        label:"Settings"
+        href:"/upgrade",
+        label:"Upgrade"
     },
+    
+    
+  
 
 ];
 

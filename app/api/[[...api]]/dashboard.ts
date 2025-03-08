@@ -35,7 +35,7 @@ const app = new Hono()
         })
         .from(transactions)
         .innerJoin(account, eq(transactions.accountId, account.id))
-        .where(dateFilter)
+        .where(and(dateFilter, eq(account.userId, auth.userId)))
         .execute();
 
       // Total Accounts
@@ -44,6 +44,7 @@ const app = new Hono()
           noOfAccounts: count(account.id),
         })
         .from(account)
+        .where(eq(account.userId, auth.userId))
         .execute();
 
       // Top Accounts
@@ -55,7 +56,7 @@ const app = new Hono()
         })
         .from(account)
         .leftJoin(transactions, eq(account.id, transactions.accountId))
-        .where(dateFilter)
+        .where(and(dateFilter, eq(account.userId, auth.userId)))
         .groupBy(account.id)
         .having(isNotNull(sql`SUM(${transactions.amount})`))
         .orderBy(sql<number>`SUM(${transactions.amount}) DESC`)

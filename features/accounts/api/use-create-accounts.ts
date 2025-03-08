@@ -1,7 +1,6 @@
 import { InferRequestType,InferResponseType } from "hono";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-
 import {client} from "@/lib/hono";
 import { json } from "stream/consumers";
 
@@ -20,6 +19,8 @@ export const useCreateAccount =() =>{
     ({
         mutationFn: async (json) => {
             const response=await client.api.accounts.$post({ json })
+            // const responseText = await response.text();
+            // console.log("Raw response:", responseText);
             return await response.json();
         },
         onSuccess: () => {
@@ -28,8 +29,9 @@ export const useCreateAccount =() =>{
             
 
         },
-        onError: () => {
-            toast.error("Failed to create account")
+        onError: (error) => {
+            console.error("Error creating account:", error);
+            toast.error("Error creating acccount")
         }
     })
     return mutation;
